@@ -1,0 +1,10 @@
+#!/bin/bash
+# Run central
+
+make central
+
+echo -n "Enter number of processes: "
+read NUM_PROCS
+echo -n "Enter number of loops: "
+read NUM_LOOPS
+mpiexec -n $NUM_PROCS ./central $NUM_LOOPS

@@ -1,0 +1,8 @@
+#!/bin/bash
+# Run ring
+
+echo -n "Enter number of processes: "
+read NUM_PROCS
+echo -n "Enter number of loops: "
+read NUM_LOOPS
+mpiexec -n $NUM_PROCS ./ring $NUM_LOOPS
