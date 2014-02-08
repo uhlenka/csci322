@@ -44,7 +44,7 @@ int main(int argc, char **argv)
     while (num_loops > 0) {
     
     	/* Generate random wait time. */
-    	usleep(rand_r(&seed)/1000);
+    	usleep((rand_r(&seed) % 500)*1000);
     	
     	/* Generate random value. */
     	my_v = rand_r(&seed) % 100;
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
     my_elapsed = my_end - my_start;
     MPI_Reduce(&my_elapsed, &global_elapsed, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
     if (my_rank == 0) {
-    	printf("Time elapsed: %f milliseconds\n", global_elapsed*1000);
+    	printf("Time elapsed: %.3f seconds\n", global_elapsed);
     }
     
     /* Finalize MPI and exit. */
