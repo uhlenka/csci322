@@ -3,6 +3,6 @@
 
 echo -n "Enter number of processes: "
 read NUM_PROCS
-echo -n "Enter number of loops: "
+echo -n "Enter number of loop iterations: "
 read NUM_LOOPS
 mpiexec -n $NUM_PROCS ./ring $NUM_LOOPS

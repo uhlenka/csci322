@@ -56,7 +56,7 @@ int main(int argc, char **argv)
     		int i;
     		for (i=0; i<comm_sz; i++) {
     			if (i != my_rank) {
-    				MPI_Send(&my_v, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+    				MPI_Ssend(&my_v, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
     				MPI_Recv(&temp, 1, MPI_INT, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
     				if (temp > max) {
     					max = temp;
