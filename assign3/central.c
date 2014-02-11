@@ -48,14 +48,11 @@ int main(int argc, char **argv)
     	
     	/* Generate random value. */
     	my_v = rand_r(&seed) % 100;
-//printf("%d's value: %d\n", my_rank, my_v);
 
     	/* Calculate and distribute max and min. */
     	if (comm_sz > 1) {
     		MPI_Allreduce(&my_v, &min, 1, MPI_INT, MPI_MIN, MPI_COMM_WORLD);
     		MPI_Allreduce(&my_v, &max, 1, MPI_INT, MPI_MAX, MPI_COMM_WORLD);
-//if (my_rank == 0)
-//printf("max: %d, min: %d\n", max, min);
     	}
     	else {
     		max = min = my_v;

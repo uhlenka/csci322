@@ -48,16 +48,30 @@ int main(int argc, char **argv)
     	
     	/* Generate random value. */
     	my_v = rand_r(&seed) % 100;
-//printf("%d's value: %d\n", my_rank, my_v);
 
     	/* Calculate and distribute max and min. */
     	max = min = my_v;
-    	if (comm_sz > 1) {
+    	if (comm_sz > 2) {
     		int i;
+            int order = (my_rank) % 2;
     		for (i=0; i<comm_sz; i++) {
+                if (my_rank <= i) {
+                    if (order == 0) {
+                        order = 1;
+                    }
+                    else {
+                        order = 0;
+                    }
+                }
     			if (i != my_rank) {
-    				MPI_Ssend(&my_v, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
-    				MPI_Recv(&temp, 1, MPI_INT, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+                    if (order == 0) {
+                        MPI_Send(&my_v, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+                        MPI_Recv(&temp, 1, MPI_INT, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+                    }
+                    else {
+                        MPI_Recv(&temp, 1, MPI_INT, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+                        MPI_Send(&my_v, 1, MPI_INT, i, 0, MPI_COMM_WORLD);
+                    }
     				if (temp > max) {
     					max = temp;
     				}
@@ -66,9 +80,17 @@ int main(int argc, char **argv)
     				}
     			}
     		}
-//if (my_rank == 0)
-//printf("max: %d, min: %d\n", max, min);
     	}
+        else if (comm_sz == 2) {
+            if (my_rank == 0) {
+                MPI_Send(&my_v, 1, MPI_INT, 1, 0, MPI_COMM_WORLD);
+                MPI_Recv(&temp, 1, MPI_INT, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            }
+            else {
+                MPI_Recv(&temp, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+                MPI_Send(&my_v, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+            }
+        }
     	
     	/* Decrement loop counter. */
     	num_loops -= 1;
