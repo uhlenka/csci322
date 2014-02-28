@@ -1,0 +1,8 @@
+#!/bin/bash
+# Run pmerge
+
+echo -n "Enter number of processors: "
+read NUM_PROCS
+echo -n "Enter size of array: "
+read ARR_SIZE
+mpiexec -n $NUM_PROCS ./pmerge $ARR_SIZE
